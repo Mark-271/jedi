@@ -1,0 +1,91 @@
+@startuml
+
+state "Main Menu" as MainMenu
+MainMenu : Hello, young Padawan! This is testing system for Jedi Code knowledge.
+MainMenu : Please select one of next items:
+MainMenu : (1) See Jedi Code
+MainMenu : (2) See information about Jedi Order
+MainMenu : (3) Start testing
+MainMenu : (4) Exit
+
+state "Jedi Code Info" as JediCodeInfo
+JediCodeInfo : [Show Jedi Code, line by line, 1 sec sleep after each];
+JediCodeInfo : [Clear screen once it's done];
+JediCodeInfo : Please select one of next items:
+JediCodeInfo : (1) See information about Jedi Order
+JediCodeInfo : (2) Back to main menu
+
+state "Jedi Order Info" as JediOrderInfo
+JediOrderInfo : [Show info about Jedi Order]
+JediOrderInfo : Please select one of next items:
+JediOrderInfo : (1) See Jedi Code
+JediOrderInfo : (2) Back to main menu
+
+state "Start Testing" as StartTesting
+StartTesting : Testing started; please enter correct answer for each question.
+StartTesting : <color:red>[Start timeout timer with interval = 30 sec]</color>
+
+state "Exit" as Exit
+Exit : [Exit program with code=0]
+
+[*]		-->		MainMenu
+MainMenu	-down->		JediCodeInfo	: "1"
+MainMenu	-down->		JediOrderInfo	: "2"
+MainMenu	-down->		StartTesting	: "3"
+MainMenu	-down->		Exit		: "4"
+JediCodeInfo	-right->	JediOrderInfo	: "1"
+JediCodeInfo	-up->		MainMenu	: "2"
+JediOrderInfo	-left->		JediCodeInfo	: "1"
+JediOrderInfo	-up->		MainMenu	: "2"
+StartTesting	-down->		Testing
+Exit		-->		[*]
+
+state Testing {
+	state "Question 1" as Question1
+	Question1 : There is no emotion, there is ...
+
+	state "Question 2" as Question2
+	Question2 : There is no ignorance, there is ...
+
+	state "Question 3" as Question3
+	Question3 : There is no passion, there is ...
+
+	state "Question 4" as Question4
+	Question4 : There is no chaos, there is ...
+
+	state "Question 5" as Question5
+	Question5 : There is no death, there is ...
+
+	state "Successful completion" as Success
+	Success : Congratulations, young Padawan! You know Jedi Code.
+	Success : May the Force be with you!
+	Success : [Exit program with code=0]
+
+	state "Fail to complete" as Failure
+	Failure : Alas, young Padawan, you are not ready for the path yet!
+	Failure : [Exit program with code=1]
+
+	[*]		-down-> Question1
+	Question1	-->	Question2	: "peace"
+	Question1	-->	Failure		: not "peace"
+	Question2	-->	Question3	: "knowledge"
+	Question2	-->	Failure		: not "knowledge"
+	Question3	-->	Question4	: "serenity"
+	Question3	-->	Failure		: not "serenity"
+	Question4	-->	Question5	: "harmony"
+	Question4	-->	Failure		: not "harmony"
+	Question5	-->	Success		: "the Force" or "Force"
+	Question5	-->	Failure		: not ("the Force" or "Force")
+	Success		-->	[*]
+	Failure		-->	[*]
+
+	||
+
+	state "Timeout" as Timeout
+	Timeout : Sorry, you are out of time... Try again later.
+	Timeout : [Exit program with code=1]
+
+	[*]		-->	Timeout : <color:red>timer expired</color>
+}
+
+@enduml
