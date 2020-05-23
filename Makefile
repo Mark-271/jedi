@@ -3,7 +3,9 @@ CC := gcc
 LD := gcc
 CPPFLAGS := -Iinclude -MD
 CFLAGS := -Wall -O2
-OBJS :=	src/main.o
+OBJS :=			\
+	src/main.o	\
+	src/tools.o
 
 # Be silent per default, but 'make V=1' will show all compiler calls
 ifneq ($(V),1)
