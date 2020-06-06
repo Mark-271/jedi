@@ -6,6 +6,7 @@ CFLAGS := -Wall -O2
 OBJS :=			\
 	src/main.o	\
 	src/menu.o	\
+	src/test.o	\
 	src/tools.o
 
 # Be silent per default, but 'make V=1' will show all compiler calls
