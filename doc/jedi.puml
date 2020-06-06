@@ -21,25 +21,22 @@ JediOrderInfo : Please select one of next items:
 JediOrderInfo : (1) See Jedi Code
 JediOrderInfo : (2) Back to main menu
 
-state "Start Testing" as StartTesting
-StartTesting : Testing started; please enter correct answer for each question.
-StartTesting : <color:red>[Start timeout timer with interval = 30 sec]</color>
-
 state "Exit" as Exit
 Exit : [Exit program with code=0]
 
 [*]		-->		MainMenu
 MainMenu	-down->		JediCodeInfo	: "1"
 MainMenu	-down->		JediOrderInfo	: "2"
-MainMenu	-down->		StartTesting	: "3"
+MainMenu	-down--->	Testing		: "3"
 MainMenu	-down->		Exit		: "4"
 JediCodeInfo	-right->	JediOrderInfo	: "1"
 JediCodeInfo	-up->		MainMenu	: "2"
 JediOrderInfo	-left->		JediCodeInfo	: "1"
 JediOrderInfo	-up->		MainMenu	: "2"
-StartTesting	-down->		Testing
 Exit		-->		[*]
 
+Testing : Testing started; please enter correct answer for each question.
+Testing : <color:red>[Start timeout timer with interval = 30 sec]</color>
 state Testing {
 	state "Question 1" as Question1
 	Question1 : There is no emotion, there is ...
@@ -86,6 +83,7 @@ state Testing {
 	Timeout : [Exit program with code=1]
 
 	[*]		-->	Timeout : <color:red>timer expired</color>
+	Timeout		-->	[*]
 }
 
 @enduml
