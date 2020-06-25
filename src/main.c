@@ -1,5 +1,7 @@
 #include <menu.h>
 #include <tools.h>
+#include <test.h>
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -50,7 +52,10 @@ int main(void)
 	}
 	menu_exit();
 
-	printf("TODO: Testing is not implemented yet\n"); // XXX
-
+	printf("Testing started: please enter correct "
+		"answer for each question\n"); 
+	
+	testing();
+	
 	return EXIT_SUCCESS;
 }

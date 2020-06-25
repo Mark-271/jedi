@@ -276,7 +276,7 @@ static int menu_handle_event(enum menu_event event)
 		return -2;
 	}
 
-	transition_func = menu_state_handler[new_state];;
+	transition_func = menu_state_handler[new_state];
 	if (!transition_func) {
 		fprintf(stderr, "Error: Transition function doesn't exist for "
 				"state %d\n", new_state);
@@ -284,17 +284,6 @@ static int menu_handle_event(enum menu_event event)
 	}
 	transition_func();
 	obj.state = new_state;
-
-	return 0;
-}
-
-/* ---- public -------------------------------------------------------------- */
-
-/**
- * Initialize menu module.
- *
- * @param cb Callback to run when menu finishes.
- */
 void menu_init(menu_cb_t cb)
 {
 	obj.cb = cb;
