@@ -282,8 +282,11 @@ static int menu_handle_event(enum menu_event event)
 				"state %d\n", new_state);
 		return -3;
 	}
+
 	transition_func();
 	obj.state = new_state;
+	return 0;
+}
 void menu_init(menu_cb_t cb)
 {
 	obj.cb = cb;
