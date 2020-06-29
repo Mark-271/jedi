@@ -6,11 +6,13 @@
  */
 
 #include <test.h>
+#include <timer2.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <time.h>
 
 #define BUF_SIZE 80
 
@@ -123,14 +125,13 @@ static bool test_handle_answer5(char *buf)
 		return false;
 	}
 }
-/* ----public---------------------------------------------------------------- */
 
 /**
- * Function that provides testing procedure.
+ * Function that provides procedure for handling answers from user.
  *
  * @return 0 on success or 1 on failure.
  */
-int testing(void)
+static int test_handle_answers(void)
 {	
 	char buf[BUF_SIZE];
 	size_t num = 0;
@@ -141,45 +142,79 @@ int testing(void)
 				puts(questions[QUESTION_1]);
 				read_answer(buf);
 				if (!test_handle_answer1(buf))
-					goto exit;
+					return 1;
 				++num;
 				break;
 			case QUESTION_2:
 				puts(questions[QUESTION_2]);
 				read_answer(buf);
 				if (!test_handle_answer2(buf))
-					goto exit;
+					return 1;
 				++num;
 				break;
 			case QUESTION_3:
 				puts(questions[QUESTION_3]);
 				read_answer(buf);
 				if (!test_handle_answer3(buf))
-					goto exit;
+					return 1;
 				++num;
 				break;
 			case QUESTION_4:
 				puts(questions[QUESTION_4]);
 				read_answer(buf);
 				if (!test_handle_answer4(buf))
-					goto exit;
+					return 1;
 				++num;
 				break;
 			case QUESTION_5:
 				puts(questions[num]);
 				read_answer(buf);
 				if (!test_handle_answer5(buf))
-					goto exit;
+					return 1;
 				++num;
 				break;
 		}
 	}
-	puts("Congratulations, young Padawan! You know Jedi Code.\n"
-			"May the Force be with you!");
 	return 0;
-exit:
-	puts("Alas, young Padawan, you are not ready "
-		"for the path yet!");
-	return 1;
+}
+
+/* Function that defines behaviour of the program after timer expires */
+static void timeout(void *priv)
+{
+	printf("%s\n", (char *)priv);	
+	exit(1);
+}
+
+/* --- public ----------------------------------------------------------------*/
+
+/**
+ * Function that provides testing procedure.
+ * 
+ * @return 0 on success or 1 on failure
+ * when timer expires, function returns 1
+ */
+int testing(void)
+{
+	int ret;
+	struct timer2 *tm;
+	void *msg = &"Sorry, you out of time... Try again later.";
+
+	tm = timer2_create(timeout, msg);
+	timer2_start(tm, 30000, true);
+
+	ret = test_handle_answers();
+	if(!ret) {
+		puts("Congratulations, young Padawan! You know Jedi Code.\n"
+				"May the Force be with you!");
+		timer2_destroy(tm);		
+		exit(0);
+	}
+	else {
+		puts("Alas, young Padawan, you are not ready "
+				"for the path yet!");
+
+		timer2_destroy(tm);	
+		exit(1);
+	}
 }
 
