@@ -3,11 +3,13 @@ CC := gcc
 LD := gcc
 CPPFLAGS := -Iinclude -MD
 CFLAGS := -Wall -O2
+LFLAGS := -lrt
 OBJS :=			\
 	src/main.o	\
 	src/menu.o	\
 	src/test.o	\
-	src/tools.o
+	src/tools.o	\
+	src/timer2.o
 
 # Be silent per default, but 'make V=1' will show all compiler calls
 ifneq ($(V),1)
@@ -30,7 +32,7 @@ all: $(APP)
 
 $(APP): $(OBJS)
 	@printf "  LD      $@\n"
-	$(Q)$(LD) $(LDFLAGS) $(OBJS) -o $(APP)
+	$(Q)$(LD) $(LDFLAGS) $(OBJS) $(LFLAGS) -o $(APP) $(LDLIBS)
 
 %.o: %.c
 	@printf "  CC      $(*).c\n"
@@ -41,7 +43,14 @@ clean:
 	$(Q)-rm -f $(APP)
 	$(Q)-rm -f $(OBJS)
 	$(Q)find src/ -name '*.d' -exec rm -f {} \;
+	$(Q)-rm -f cscope.*
+	$(Q)-rm -f tags
 
-.PHONY: all clean
+index:
+	$(Q)find . -name '*.[ch]' > cscope.files
+	$(Q)cscope -b -q
+	$(Q)ctags -L cscope.files
+
+.PHONY: all clean index
 
 -include $(OBJS:.o=.d)
