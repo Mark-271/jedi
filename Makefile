@@ -3,7 +3,7 @@ CC := gcc
 LD := gcc
 CPPFLAGS := -Iinclude -MD
 CFLAGS := -Wall -O2
-LFLAGS := -lrt
+LDLIBS := -lrt
 OBJS :=			\
 	src/main.o	\
 	src/menu.o	\
@@ -32,7 +32,7 @@ all: $(APP)
 
 $(APP): $(OBJS)
 	@printf "  LD      $@\n"
-	$(Q)$(LD) $(LDFLAGS) $(OBJS) $(LFLAGS) -o $(APP) $(LDLIBS)
+	$(Q)$(LD) $(LDFLAGS) $(OBJS) -o $(APP) $(LDLIBS)
 
 %.o: %.c
 	@printf "  CC      $(*).c\n"
