@@ -181,9 +181,11 @@ static int test_handle_answers(void)
 /* Function that defines behaviour of the program after timer expires */
 static void timeout(void *priv)
 {
+	struct timer2 *obj = (struct timer2 *)priv;
 	char *msg = "Sorry, you out of time... Try again later.";
+
 	printf("%s\n", msg);
-	free(priv);
+	free(obj);
 	exit(1);
 }
 
@@ -199,23 +201,22 @@ int test_exercise(void)
 {
 	int ret;
 	struct timer2 *tm = NULL;
-	void *obj = tm;
 
-	tm = timer2_create(timeout, obj);
+	tm = timer2_create(timeout, tm);
+
 	timer2_start(tm, 30000, true);
 
 	ret = test_handle_answers();
+	timer2_destroy(tm);
+
 	if(!ret) {
 		puts("Congratulations, young Padawan! You know Jedi Code.\n"
 		     "May the Force be with you!");
-		timer2_destroy(tm);
 		exit(0);
 	}
 	else {
 		puts("Alas, young Padawan, you are not ready "
 		     "for the path yet!");
-
-		timer2_destroy(tm);
 		exit(1);
 	}
 }
