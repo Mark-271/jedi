@@ -195,7 +195,7 @@ static void timeout(void *priv)
  * @return 0 on success or 1 on failure
  * when timer expires, function returns 1
  */
-int testing(void)
+int test_exercise(void)
 {
 	int ret;
 	struct timer2 *tm = NULL;

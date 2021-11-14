@@ -55,7 +55,7 @@ int main(void)
 	printf("Testing started: please enter correct "
 	       "answer for each question\n");
 
-	testing();
+	test_exercise();
 
 	return EXIT_SUCCESS;
 }
