@@ -53,9 +53,9 @@ int main(void)
 	menu_exit();
 
 	printf("Testing started: please enter correct "
-		"answer for each question\n"); 
-	
+	       "answer for each question\n");
+
 	testing();
-	
+
 	return EXIT_SUCCESS;
 }

@@ -33,7 +33,7 @@ static const char * const questions[QUESTION_NUM] = {
 	"There is no chaos, there is ...\n",
 	"There is no death, there is ...\n",
 };
-	
+
 static const char * const answers[QUESTION_NUM+1] = {
 	"peace",
 	"knowledge",
@@ -58,7 +58,7 @@ static void read_answer(char *buf)
 		return;
 	}
 
-	/* Remove trailing newline */	
+	/* Remove trailing newline */
 	size_t len = strlen(buf);
 	if (len > 0 && buf[len-1] == '\n')
 		buf[--len] = '\0';
@@ -80,7 +80,7 @@ static bool test_handle_answer1(char *buf)
 		return true;
 	else
 		return false;
-}	
+}
 
 static bool test_handle_answer2(char *buf)
 {
@@ -132,10 +132,10 @@ static bool test_handle_answer5(char *buf)
  * @return 0 on success or 1 on failure.
  */
 static int test_handle_answers(void)
-{	
+{
 	char buf[BUF_SIZE];
 	size_t num = 0;
-		
+
 	while (num < QUESTION_NUM) {
 		switch (num) {
 			case QUESTION_1:
@@ -181,7 +181,9 @@ static int test_handle_answers(void)
 /* Function that defines behaviour of the program after timer expires */
 static void timeout(void *priv)
 {
-	printf("%s\n", (char *)priv);	
+	char *msg = "Sorry, you out of time... Try again later.";
+	printf("%s\n", msg);
+	free(priv);
 	exit(1);
 }
 
@@ -189,32 +191,31 @@ static void timeout(void *priv)
 
 /**
  * Function that provides testing procedure.
- * 
+ *
  * @return 0 on success or 1 on failure
  * when timer expires, function returns 1
  */
 int testing(void)
 {
 	int ret;
-	struct timer2 *tm;
-	void *msg = &"Sorry, you out of time... Try again later.";
+	struct timer2 *tm = NULL;
+	void *obj = tm;
 
-	tm = timer2_create(timeout, msg);
+	tm = timer2_create(timeout, obj);
 	timer2_start(tm, 30000, true);
 
 	ret = test_handle_answers();
 	if(!ret) {
 		puts("Congratulations, young Padawan! You know Jedi Code.\n"
-				"May the Force be with you!");
-		timer2_destroy(tm);		
+		     "May the Force be with you!");
+		timer2_destroy(tm);
 		exit(0);
 	}
 	else {
 		puts("Alas, young Padawan, you are not ready "
-				"for the path yet!");
+		     "for the path yet!");
 
-		timer2_destroy(tm);	
+		timer2_destroy(tm);
 		exit(1);
 	}
 }
-

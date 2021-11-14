@@ -287,6 +287,7 @@ static int menu_handle_event(enum menu_event event)
 	obj.state = new_state;
 	return 0;
 }
+
 void menu_init(menu_cb_t cb)
 {
 	obj.cb = cb;
