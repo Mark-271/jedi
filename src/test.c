@@ -185,7 +185,8 @@ static void timeout(void *priv)
 	char *msg = "Sorry, you out of time... Try again later.";
 
 	printf("%s\n", msg);
-	free(obj);
+
+	timer2_destroy(obj);
 	exit(1);
 }
 
